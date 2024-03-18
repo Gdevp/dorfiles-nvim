@@ -37,6 +37,7 @@ set mouse=a
 " Usar Plug como gestor de plugins
 " Instalar plugins con Plug
 call plug#begin("~/.config/nvim/plugged")
+  " Essential plugins for web development"
   Plug 'junegunn/vim-plug'
   Plug 'jiangmiao/auto-pairs'
   Plug 'honza/vim-snippets'
@@ -55,10 +56,13 @@ call plug#begin("~/.config/nvim/plugged")
   Plug 'windwp/nvim-ts-autotag'
   Plug 'majutsushi/tagbar'
   " Otros plugins que uses
+  Plug 'hardhackerlabs/theme-vim', { 'as': 'hardhacker' }
+  Plug 'ghifarit53/tokyonight-vim'
+  Plug 'luochen1990/rainbow'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Recommended, not required.
-  Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
+  " Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
    " javascript
   Plug 'jelera/vim-javascript-syntax'
   Plug 'othree/yajs.vim'
@@ -79,9 +83,6 @@ call plug#end()
 " Deoplete config enable
 let g:deoplete#enable_at_startup = 1
 
-" For Neovim 0.1.3 and 0.1.4
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
 " Or if you have Neovim >= 0.1.5
 if (has("termguicolors"))
  set termguicolors
@@ -93,7 +94,17 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
 let g:NERDTreeStatusline = ''
 
-"fzf
+" Rainbow
+let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+let g:rainbow_conf = {
+\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+\	'guis': [''],
+\	'cterms': [''],
+\	'operators': '_,_',
+\}
+
+" fzf
 nnoremap <C-p> :FZF<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -194,8 +205,31 @@ let g:compe = {
     \ 'autocomplete': v:true,
     \ }
 
+" ~/.vimrc
 
-" init.vim
-"  colorscheme aura-dark " Or any Aura theme available
+" Activar autocompletado con nvim-lspconfig
+autocmd FileType * setlocal omnifunc=lsp#complete
 
-colorscheme nord
+" Mapeo para activar/desactivar el autocompletado
+nnoremap <leader>ac :call coc#toggle_completion()<CR>
+
+" Habilitar nvim-compe
+" Configuración básica
+let g:compe = {
+  \ 'enabled': v:true,
+  \ 'autocomplete': v:true,
+  \ }
+
+" Mapeo para formatear el documento actual
+let g:coc_global_extensions = ['coc-prettier']
+
+nnoremap <F1> :call coc#send_request('prettier/format', { 'source': expand('<cfile>') })<CR>
+
+" =============================================================================================================
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+let g:lightline = {'colorscheme' : 'tokyonight'}
+let g:airline_theme = "tokyonight"
+colorscheme tokyonight
+
+" colorscheme hardhacker 
